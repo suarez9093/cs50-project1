@@ -1,7 +1,7 @@
 import os
 import requests
 
-from flask import Flask, session
+from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -29,4 +29,14 @@ print('res: ', res)
 
 @app.route("/")
 def index():
-    return "Project 1: TODO"
+    return render_template("index.html")
+
+
+@app.route("/register", methods=["POST"])
+def register():
+    db.execute("INSERT INTO ")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    print(email)
+    print(password)
+    return render_template("success.html", email=email, password=password, message="Successfully registered!")
