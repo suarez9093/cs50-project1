@@ -53,3 +53,17 @@ def login():
         return render_template("error.html", message="Please register for an account")
     else:
         return render_template("login.html", email=email)
+
+
+@app.route("/search")
+def search():
+    search = request.form.get("search", methods=["POST"])
+    print(search)
+    res = db.execute("SELECT * FROM books WHERE title = :title OR author = :author OR isbn = :isbn OR year = :year",
+                     {
+                         "title": search,
+                         "author": search,
+                         "isbn": search,
+                         "year": search
+                     }).fetchall()
+    return render_template("login.html", res=res)
