@@ -24,8 +24,6 @@ db = scoped_session(sessionmaker(bind=engine))
 api_key = "6SW4uW5WvXThNV8UmMlCfg"
 res = requests.get(f"https://www.goodreads.com/search.xml?key={api_key}&q=Ender%27s+Game")
 
-print('res: ', res)
-
 
 @app.route("/")
 def index():
@@ -34,9 +32,24 @@ def index():
 
 @app.route("/register", methods=["POST"])
 def register():
-    db.execute("INSERT INTO ")
     email = request.form.get("email")
     password = request.form.get("password")
-    print(email)
-    print(password)
+
+    if db.execute("SELECT * FROM users WHERE email = :email", {"email": email}).rowcount == 1:
+        return render_template("error.html", message="Email already exsists")
+    db.execute("INSERT INTO users (email, password) VALUES(:email, :password)", {"email": email, "password": password})
+
+    db.commit()
     return render_template("success.html", email=email, password=password, message="Successfully registered!")
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    email = request.form.get("login_email")
+    password = request.form.get("login_password")
+
+    if db.execute("SELECT * FROM users WHERE email = :email AND password = :password", {"email": email, "password":
+        password}).rowcount == 0:
+        return render_template("error.html", message="Please register for an account")
+    else:
+        return render_template("login.html", email=email)
