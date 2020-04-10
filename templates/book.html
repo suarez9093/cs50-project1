@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+Book Detail
+{% endblock %}
+
+{% block main %}
+<ul>
+    <li>Title: {{ book.title }}</li>
+    <li>Author: {{ book.author }}</li>
+    <li>Year: {{ book.year }}</li>
+</ul>
+{% endblock %}

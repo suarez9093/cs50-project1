@@ -12,7 +12,17 @@ Welcome {{ email }}
 
 <ul>
     {% for response in res %}
-    <li>{{ response }}</li>
+    <li>
+
+        <div class="card" style="width: 18rem;">
+  <div class="card-body">
+     <div>Title: <a href="{{ url_for('detail', book_id=response.id) }}" class="card-link">{{ response.title }}</a></div>
+    <h6 class="card-subtitle mb-2 text-muted">Author: {{ response.author }}</h6>
+    <p class="card-text">Year Published: {{ response.year }}</p>
+
+  </div>
+</div>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}

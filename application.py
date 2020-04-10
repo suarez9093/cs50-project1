@@ -55,10 +55,10 @@ def login():
         return render_template("login.html", email=email)
 
 
-@app.route("/search")
+@app.route("/search", methods=["POST"])
 def search():
-    search = request.form.get("search", methods=["POST"])
-    print(search)
+    search = request.form.get("search")
+
     res = db.execute("SELECT * FROM books WHERE title = :title OR author = :author OR isbn = :isbn OR year = :year",
                      {
                          "title": search,
@@ -66,4 +66,14 @@ def search():
                          "isbn": search,
                          "year": search
                      }).fetchall()
+    print("res: ", res)
     return render_template("login.html", res=res)
+
+
+@app.route("/detail/<int:book_id>")
+def detail(book_id):
+    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": book_id}).fetchone()
+
+    if book is None:
+        return render_template("error.html", message="No such book")
+    return render_template("book.html", book=book)
